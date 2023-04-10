@@ -19,6 +19,22 @@
     playerOptions,
     utils;
 
+    // The wake lock sentinel.
+let wakeLock = null;
+
+// Function that attempts to request a screen wake lock.
+const requestWakeLock = async () => {
+  try {
+    wakeLock = await navigator.wakeLock.request();
+    wakeLock.addEventListener('release', () => {
+      console.log('Screen Wake Lock released:', wakeLock.released);
+    });
+    console.log('Screen Wake Lock released:', wakeLock.released);
+  } catch (err) {
+    console.error(`${err.name}, ${err.message}`);
+  }
+};
+
   /**
    * The following are player object event callback examples.
    * Override globally by setting window.sm2BarPlayers.on = {}, or individually by window.sm2BarPlayers[0].on = {} etc.
@@ -232,8 +248,13 @@
 
         },
 
-        onplay: function () {
+        onplay: async function () {
           utils.css.swap(dom.o, 'paused', 'playing');
+          
+          // prevent sleep
+          // Request a screen wake lock…
+          requestWakeLock();
+
           callback('play', this);
         },
 
@@ -246,12 +267,22 @@
             console.error(error);
           });
 
+          // resume sleep
+          if (wakeLock !== null) {
+            wakeLock.release().then(() => {
+              wakeLock = null;
+            });
+          }
+
           utils.css.swap(dom.o, 'playing', 'paused');
           callback('pause', this);
         },
 
         onresume: function () {
           utils.css.swap(dom.o, 'paused', 'playing');
+
+          // prevent sleep
+          requestWakeLock();
         },
 
         whileloading: function () {
@@ -327,6 +358,8 @@
             console.error(error);
           });
 
+          // resume sleep
+
           utils.css.remove(dom.o, 'playing');
 
         },
@@ -347,6 +380,8 @@
           dom.progress.style.left = '0%';
 
           lastIndex = playlistController.data.selectedIndex;
+
+
 
           callback('finish', this);
 
@@ -371,8 +406,17 @@
 
             // end of playlist case
 
+          // resume sleep
+          if (wakeLock !== null) {
+            wakeLock.release().then(() => {
+              wakeLock = null;
+            });
+          }
+
             // explicitly stop?
             // this.stop();
+
+
 
             callback('end', this);
 
