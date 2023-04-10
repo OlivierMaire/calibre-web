@@ -19,21 +19,21 @@
     playerOptions,
     utils;
 
-    // The wake lock sentinel.
-let wakeLock = null;
+  // The wake lock sentinel.
+  let wakeLock = null;
 
-// Function that attempts to request a screen wake lock.
-const requestWakeLock = async () => {
-  try {
-    wakeLock = await navigator.wakeLock.request();
-    wakeLock.addEventListener('release', () => {
+  // Function that attempts to request a screen wake lock.
+  const requestWakeLock = async () => {
+    try {
+      wakeLock = await navigator.wakeLock.request();
+      wakeLock.addEventListener('release', () => {
+        console.log('Screen Wake Lock released:', wakeLock.released);
+      });
       console.log('Screen Wake Lock released:', wakeLock.released);
-    });
-    console.log('Screen Wake Lock released:', wakeLock.released);
-  } catch (err) {
-    console.error(`${err.name}, ${err.message}`);
-  }
-};
+    } catch (err) {
+      console.error(`${err.name}, ${err.message}`);
+    }
+  };
 
   /**
    * The following are player object event callback examples.
@@ -250,7 +250,7 @@ const requestWakeLock = async () => {
 
         onplay: async function () {
           utils.css.swap(dom.o, 'paused', 'playing');
-          
+
           // prevent sleep
           // Request a screen wake lock…
           requestWakeLock();
@@ -260,6 +260,8 @@ const requestWakeLock = async () => {
 
         onpause: function () {
 
+          // get csrf_token
+          let csrf_token = $("input[name='csrf_token']").val();
           $.ajax(calibre.bookmarkUrl, {
             method: "post",
             data: {
@@ -353,7 +355,8 @@ const requestWakeLock = async () => {
         },
 
         onstop: function () {
-
+          // get csrf_token
+          let csrf_token = $("input[name='csrf_token']").val();
           $.ajax(calibre.bookmarkUrl, {
             method: "post",
             data: {
@@ -371,7 +374,8 @@ const requestWakeLock = async () => {
         },
 
         onfinish: function () {
-
+          // get csrf_token
+          let csrf_token = $("input[name='csrf_token']").val();
           $.ajax(calibre.bookmarkUrl, {
             method: "post",
             data: {
@@ -415,12 +419,12 @@ const requestWakeLock = async () => {
 
             // end of playlist case
 
-          // resume sleep
-          if (wakeLock !== null) {
-            wakeLock.release().then(() => {
-              wakeLock = null;
-            });
-          }
+            // resume sleep
+            if (wakeLock !== null) {
+              wakeLock.release().then(() => {
+                wakeLock = null;
+              });
+            }
 
             // explicitly stop?
             // this.stop();
