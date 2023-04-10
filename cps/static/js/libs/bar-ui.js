@@ -262,7 +262,10 @@ const requestWakeLock = async () => {
 
           $.ajax(calibre.bookmarkUrl, {
             method: "post",
-            data: { bookmark: this.position }
+            data: {
+              csrf_token: csrf_token,
+              bookmark: this.position
+            }
           }).fail(function (xhr, status, error) {
             console.error(error);
           });
@@ -353,7 +356,10 @@ const requestWakeLock = async () => {
 
           $.ajax(calibre.bookmarkUrl, {
             method: "post",
-            data: { bookmark: this.position }
+            data: {
+              csrf_token: csrf_token,
+              bookmark: this.position
+            }
           }).fail(function (xhr, status, error) {
             console.error(error);
           });
@@ -368,7 +374,10 @@ const requestWakeLock = async () => {
 
           $.ajax(calibre.bookmarkUrl, {
             method: "post",
-            data: { bookmark: this.position }
+            data: {
+              csrf_token: csrf_token,
+              bookmark: this.position
+            }
           }).fail(function (xhr, status, error) {
             console.error(error);
           });
