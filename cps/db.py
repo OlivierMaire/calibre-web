@@ -55,6 +55,8 @@ log = logger.create()
 
 cc_exceptions = ['composite', 'series']
 cc_classes = {}
+books_custom_column_links = {}
+
 
 Base = declarative_base()
 
@@ -502,7 +504,6 @@ class CalibreDB:
     @classmethod
     def setup_db_cc_classes(cls, cc):
         cc_ids = []
-        books_custom_column_links = {}
         for row in cc:
             if row.datatype not in cc_exceptions:
                 if row.datatype == 'series':
@@ -530,6 +531,7 @@ class CalibreDB:
                                                                                 str(row.id) + '.id'),
                                                                      primary_key=True)
                                                               )
+                    
                 cc_ids.append([row.id, row.datatype])
 
                 ccdict = {'__tablename__': 'custom_column_' + str(row.id),
@@ -567,7 +569,7 @@ class CalibreDB:
                         relationship(cc_classes[cc_id[0]],
                                      secondary=books_custom_column_links[cc_id[0]],
                                      backref='books'))
-
+                
         return cc_classes
 
     @classmethod

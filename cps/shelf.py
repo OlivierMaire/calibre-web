@@ -28,6 +28,7 @@ from flask_babel import gettext as _
 from flask_login import current_user, login_required
 from sqlalchemy.exc import InvalidRequestError, OperationalError
 from sqlalchemy.sql.expression import func, true
+from sqlalchemy import text
 
 from . import calibre_db, config, db, logger, ub
 from .render_template import render_title_template
@@ -396,8 +397,22 @@ def delete_shelf_helper(cur_shelf):
 def change_shelf_order(shelf_id, order):
     result = calibre_db.session.query(db.Books).outerjoin(db.books_series_link,
                                                           db.Books.id == db.books_series_link.c.book)\
-        .outerjoin(db.Series).join(ub.BookShelf, ub.BookShelf.book_id == db.Books.id) \
+        .outerjoin(db.Series) \
+        .join(ub.BookShelf, ub.BookShelf.book_id == db.Books.id) \
         .filter(ub.BookShelf.shelf == shelf_id).order_by(*order).all()
+    for index, entry in enumerate(result):
+        book = ub.session.query(ub.BookShelf).filter(ub.BookShelf.shelf == shelf_id) \
+            .filter(ub.BookShelf.book_id == entry.id).first()
+        book.order = index
+    ub.session_commit("Shelf-id:{} - Order changed".format(shelf_id))
+
+def change_shelf_order_cc(shelf_id, order, cc):
+    result = calibre_db.session.query(db.Books).outerjoin(db.books_series_link,
+                                                          db.Books.id == db.books_series_link.c.book)\
+        .outerjoin(db.Series) \
+        .outerjoin(db.books_custom_column_links[cc.id], db.Books.id == db.books_custom_column_links[cc.id].c.book) \
+        .join(ub.BookShelf, ub.BookShelf.book_id == db.Books.id) \
+        .filter(ub.BookShelf.shelf == shelf_id).order_by(text(order)).all()
     for index, entry in enumerate(result):
         book = ub.session.query(ub.BookShelf).filter(ub.BookShelf.shelf == shelf_id) \
             .filter(ub.BookShelf.book_id == entry.id).first()
@@ -407,6 +422,9 @@ def change_shelf_order(shelf_id, order):
 
 def render_show_shelf(shelf_type, shelf_id, page_no, sort_param):
     shelf = ub.session.query(ub.Shelf).filter(ub.Shelf.id == shelf_id).first()
+
+    custom_columns = calibre_db.session.query(db.CustomColumns) \
+        .filter( db.CustomColumns.mark_for_delete == 0).all()
 
     # check user is allowed to access shelf
     if shelf and check_shelf_view_permissions(shelf):
@@ -430,6 +448,17 @@ def render_show_shelf(shelf_type, shelf_id, page_no, sort_param):
                 change_shelf_order(shelf_id, [db.Books.author_sort.desc(),
                                               db.Series.name.desc(),
                                               db.Books.series_index.desc()])
+            if sort_param[0:3] == 'cc_':
+                param_id = int(str.split(sort_param, '_')[1])
+                side = 'asc'
+                if str.split(sort_param, '_')[2] == 'old':
+                    side = 'desc'
+                for col in custom_columns:
+                    if col.id == param_id:
+                              
+                              change_shelf_order_cc(shelf_id,  'books_custom_column_'+ str(param_id)+'_link.value ' + side , col)
+
+
             page = "shelf.html"
             pagesize = 0
         else:
@@ -456,8 +485,10 @@ def render_show_shelf(shelf_type, shelf_id, page_no, sort_param):
                 log.error_or_exception("Settings Database error: {}".format(e))
                 flash(_("Oops! Database Error: %(error)s.", error=e.orig), category="error")
 
+
         return render_title_template(page,
                                      entries=result,
+                                     custom_columns=custom_columns,
                                      pagination=pagination,
                                      title=_("Shelf: '%(name)s'", name=shelf.name),
                                      shelf=shelf,

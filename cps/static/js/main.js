@@ -588,14 +588,16 @@ $(function() {
     });
 
     $("#toggle_order_shelf").click(function() {
-        $("#new").toggleClass("disabled");
-        $("#old").toggleClass("disabled");
-        $("#asc").toggleClass("disabled");
-        $("#desc").toggleClass("disabled");
-        $("#auth_az").toggleClass("disabled");
-        $("#auth_za").toggleClass("disabled");
-        $("#pub_new").toggleClass("disabled");
-        $("#pub_old").toggleClass("disabled");
+        // $("#new").toggleClass("disabled");
+        // $("#old").toggleClass("disabled");
+        // $("#asc").toggleClass("disabled");
+        // $("#desc").toggleClass("disabled");
+        // $("#auth_az").toggleClass("disabled");
+        // $("#auth_za").toggleClass("disabled");
+        // $("#pub_new").toggleClass("disabled");
+        // $("#pub_old").toggleClass("disabled");
+$(".filterheader a[data-toggle=tooltip]").toggleClass("disabled");
+
         var alternative_text = $("#toggle_order_shelf").data('alt-text');
         $("#toggle_order_shelf").data('alt-text', $("#toggle_order_shelf").html());
         $("#toggle_order_shelf").html(alternative_text);

@@ -25,6 +25,12 @@
           <a data-toggle="tooltip" title="{{_('Sort authors in reverse alphabetical order')}}" id="auth_za" class="btn btn-primary disabled" href="{{url_for('shelf.show_shelf', shelf_id=shelf.id, sort_param='authza')}}"><span class="glyphicon glyphicon-user"></span><span class="glyphicon glyphicon-sort-by-alphabet-alt"></span></a>
           <a data-toggle="tooltip" title="{{_('Sort according to publishing date, newest first')}}" id="pub_new" class="btn btn-primary disabled" href="{{url_for('shelf.show_shelf', shelf_id=shelf.id, sort_param='pubnew')}}"><span class="glyphicon glyphicon-calendar"></span><span class="glyphicon glyphicon-sort-by-order"></span></a>
           <a data-toggle="tooltip" title="{{_('Sort according to publishing date, oldest first')}}" id="pub_old" class="btn btn-primary disabled" href="{{url_for('shelf.show_shelf', shelf_id=shelf.id, sort_param='pubold')}}"><span class="glyphicon glyphicon-calendar"></span><span class="glyphicon glyphicon-sort-by-order-alt"></span></a>
+          {% if custom_columns.__len__() %}
+            {% for col in custom_columns %}
+          <a data-toggle="tooltip" title="{{_('Sort according to '+ col.name+ ', newest first')}}" id="{{col.label}}_new" class="btn btn-primary disabled" href="{{url_for('shelf.show_shelf', shelf_id=shelf.id, sort_param='cc_'+'% s' % col.id+'_new')}}"><span class="glyphicon glyphicon-th-list"></span><span class="glyphicon glyphicon-sort-by-order"></span></a>
+          <a data-toggle="tooltip" title="{{_('Sort according to '+ col.name+ ', oldest first')}}" id="{{col.label}}_old" class="btn btn-primary disabled" href="{{url_for('shelf.show_shelf', shelf_id=shelf.id, sort_param='cc_'+'% s' % col.id+'_old')}}"><span class="glyphicon glyphicon-th-list"></span><span class="glyphicon glyphicon-sort-by-order-alt"></span></a>
+            {% endfor %}
+          {% endif %}
         </div>
       {% endif %}
     {% endif %}
