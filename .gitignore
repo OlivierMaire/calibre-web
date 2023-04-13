@@ -37,3 +37,4 @@ settings.yaml
 gdrive_credentials
 client_secrets.json
 gmail.json
+/.key

@@ -22,7 +22,6 @@ import errno
 import signal
 import socket
 import subprocess  # nosec
-from .services.background_scheduler import BackgroundScheduler
 
 try:
     from gevent.pywsgi import WSGIServer
@@ -153,7 +152,7 @@ class WebServer(object):
         # The value of __package__ indicates how Python was called. It may
         # not exist if a setuptools script is installed as an egg. It may be
         # set incorrectly for entry points created with pip on Windows.
-        if getattr(__main__, "__package__", None) is None or (
+        if getattr(__main__, "__package__", "") in ["", None] or (
             os.name == "nt"
             and __main__.__package__ == ""
             and not os.path.exists(py_script)
@@ -194,6 +193,8 @@ class WebServer(object):
                 rv.extend(("-m", py_module.lstrip(".")))
 
         rv.extend(args)
+        if os.name == 'nt':
+            rv = ['"{}"'.format(a) for a in rv]
         return rv
 
     def _start_gevent(self):
@@ -263,11 +264,12 @@ class WebServer(object):
 
         log.info("Performing restart of Calibre-Web")
         args = self._get_args_for_reloading()
-        subprocess.call(args, close_fds=True)  # nosec
+        os.execv(args[0].lstrip('"').rstrip('"'), args)
         return True
 
     @staticmethod
     def shutdown_scheduler():
+        from .services.background_scheduler import BackgroundScheduler
         scheduler = BackgroundScheduler()
         if scheduler:
             scheduler.scheduler.shutdown()
