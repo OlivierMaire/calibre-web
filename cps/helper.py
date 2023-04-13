@@ -18,6 +18,7 @@
 #  along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 import os
+import random
 import io
 import mimetypes
 import re
@@ -171,10 +172,6 @@ def check_send_to_ereader(entry):
             book_formats.append({'format': 'Epub',
                                  'convert': 0,
                                  'text': _('Send %(format)s to eReader', format='Epub')})
-        if 'MOBI' in formats:
-            book_formats.append({'format': 'Mobi',
-                                 'convert': 0,
-                                 'text': _('Send %(format)s to eReader', format='Mobi')})
         if 'PDF' in formats:
             book_formats.append({'format': 'Pdf',
                                  'convert': 0,
@@ -204,8 +201,8 @@ def check_read_formats(entry):
 
 
 # Files are processed in the following order/priority:
-# 1: If Mobi file is existing, it's directly send to eReader email,
-# 2: If Epub file is existing, it's converted and send to eReader email,
+# 1: If epub file is existing, it's directly send to eReader email,
+# 2: If mobi file is existing, it's converted and send to eReader email,
 # 3: If Pdf file is existing, it's directly send to eReader email
 def send_mail(book_id, book_format, convert, ereader_mail, calibrepath, user_id):
     """Send email with attachments"""
@@ -213,7 +210,7 @@ def send_mail(book_id, book_format, convert, ereader_mail, calibrepath, user_id)
 
     if convert == 1:
         # returns None if success, otherwise errormessage
-        return convert_book_format(book_id, calibrepath, 'epub', book_format.lower(), user_id, ereader_mail)
+        return convert_book_format(book_id, calibrepath, 'mobi', book_format.lower(), user_id, ereader_mail)
     if convert == 2:
         # returns None if success, otherwise errormessage
         return convert_book_format(book_id, calibrepath, 'azw3', book_format.lower(), user_id, ereader_mail)
@@ -612,7 +609,7 @@ def reset_password(user_id):
     if not config.get_mail_server_configured():
         return 2, None
     try:
-        password = generate_random_password()
+        password = generate_random_password(config.config_password_min_length)
         existing_user.password = generate_password_hash(password)
         ub.session.commit()
         send_registration_mail(existing_user.email, existing_user.name, password, True)
@@ -621,11 +618,35 @@ def reset_password(user_id):
         ub.session.rollback()
         return 0, None
 
+def generate_random_password(min_length):
+    min_length = max(8, min_length) - 4
+    random_source = "abcdefghijklmnopqrstuvwxyz01234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%&*()?"
+    # select 1 lowercase
+    s = "abcdefghijklmnopqrstuvwxyz"
+    password = [s[c % len(s)] for c in os.urandom(1)]
+    # select 1 uppercase
+    s = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    password.extend([s[c % len(s)] for c in os.urandom(1)])
+    # select 1 digit
+    s = "01234567890"
+    password.extend([s[c % len(s)] for c in os.urandom(1)])
+    # select 1 special symbol
+    s = "!@#$%&*()?"
+    password.extend([s[c % len(s)] for c in os.urandom(1)])
 
-def generate_random_password():
+    # generate other characters
+    password.extend([random_source[c % len(random_source)] for c in os.urandom(min_length)])
+
+    # password_list = list(password)
+    # shuffle all characters
+    random.SystemRandom().shuffle(password)
+    return ''.join(password)
+
+
+'''def generate_random_password(min_length):
     s = "abcdefghijklmnopqrstuvwxyz01234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%&*()?"
-    passlen = 8
-    return "".join(s[c % len(s)] for c in os.urandom(passlen))
+    passlen = min_length
+    return "".join(s[c % len(s)] for c in os.urandom(passlen))'''
 
 
 def uniq(inpt):
@@ -664,6 +685,23 @@ def valid_email(email):
             raise Exception(_("Invalid Email address format"))
     return email
 
+def valid_password(check_password):
+    if config.config_password_policy:
+        verify = ""
+        if config.config_password_min_length > 0:
+            verify += "^(?=.{" + str(config.config_password_min_length) + ",}$)"
+        if config.config_password_number:
+            verify += "(?=.*?\d)"
+        if config.config_password_lower:
+            verify += "(?=.*?[a-z])"
+        if config.config_password_upper:
+            verify += "(?=.*?[A-Z])"
+        if config.config_password_special:
+            verify += "(?=.*?[^A-Za-z\s0-9])"
+        match = re.match(verify, check_password)
+        if not match:
+            raise Exception(_("Password doesn't comply with password validation rules"))
+    return check_password
 # ################################# External interface #################################
 
 
