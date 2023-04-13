@@ -149,20 +149,6 @@ body {
   word-wrap: break-word;
 }
 
-#mainContent > canvas {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.long-strip > .mainImage {
-  margin-bottom: 4px;
-}
-
-.long-strip > .mainImage:last-child {
-  margin-bottom: 0px !important;
-}
-
 #titlebar {
   min-height: 25px;
   height: auto;
@@ -252,3 +238,42 @@ th {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
 }
+
+.mainImageWrapper{
+  display: flex;
+  justify-content: center;
+}
+
+.mainImageWrapper > div{
+  width: 100%;
+}
+.mainImageWrapper .image-left{
+  text-align: right;
+  /* box-shadow: -50px 0px 50px -51px rgba(0,0,0,0.66) inset;
+-webkit-box-shadow: -50px 0px 50px -51px rgba(0,0,0,0.66) inset;
+-moz-box-shadow: -50px 0px 50px -51px rgba(0,0,0,0.66) inset; */
+}
+.mainImageWrapper .image-right{
+  text-align: left;
+  /* box-shadow: 50px 0px 50px -51px rgba(0,0,0,0.66) inset;
+-webkit-box-shadow: 50px 0px 50px -51px rgba(0,0,0,0.66) inset;
+-moz-box-shadow: 50px 0px 50px -51px rgba(0,0,0,0.66) inset; */
+}
+
+.mainImageWrapper.isdouble > div{
+  text-align: center;
+  box-shadow: none;
+}
+/* 
+#mainImage{
+  box-shadow: -50px 0px 50px -51px rgba(0,0,0,0.66) inset;
+-webkit-box-shadow: -50px 0px 50px -51px rgba(0,0,0,0.66) inset;
+-moz-box-shadow: -50px 0px 50px -51px rgba(0,0,0,0.66) inset;
+}
+
+
+#mainImage2{
+  box-shadow: 50px 0px 50px -51px rgba(0,0,0,0.66) inset;
+-webkit-box-shadow: 50px 0px 50px -51px rgba(0,0,0,0.66) inset;
+-moz-box-shadow: 50px 0px 50px -51px rgba(0,0,0,0.66) inset;
+} */

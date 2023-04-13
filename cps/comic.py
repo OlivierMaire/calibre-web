@@ -118,6 +118,9 @@ def get_comic_info(tmp_file_path, original_file_name, original_file_extension, r
             lang = loaded_metadata.language or ""
             loaded_metadata.language = isoLanguages.get_lang3(lang)
 
+            if (loaded_metadata.pageCount == None):
+                # get pageCountManualy
+                loaded_metadata.pageCount = archive.getNumberOfPages()
             return BookMeta(
                 file_path=tmp_file_path,
                 extension=original_file_extension,
@@ -126,13 +129,15 @@ def get_comic_info(tmp_file_path, original_file_name, original_file_extension, r
                                    for credit in loaded_metadata.credits if credit["role"] == "Writer"]) or 'Unknown',
                 cover=_extract_cover(tmp_file_path, original_file_extension, rar_executable),
                 description=loaded_metadata.comments or "",
-                tags="",
+                tags=loaded_metadata.tags or "",
                 series=loaded_metadata.series or "",
                 series_id=loaded_metadata.issue or "",
                 languages=loaded_metadata.language,
-                publisher="",
+                publisher=loaded_metadata.publisher or "",
                 pubdate="",
-                identifiers=[])
+                identifiers=[],
+                page_count=loaded_metadata.pageCount
+                )
 
     return BookMeta(
         file_path=tmp_file_path,
@@ -148,3 +153,46 @@ def get_comic_info(tmp_file_path, original_file_name, original_file_extension, r
         publisher="",
         pubdate="",
         identifiers=[])
+
+
+
+def extract_page(tmp_file_name, original_file_extension, rar_executable, pageNum):
+    if use_comic_meta:
+        archive = ComicArchive(tmp_file_name, rar_exe_path=rar_executable)
+        return archive.getPage(pageNum), archive.getPageName(pageNum)
+    else:
+        cover_data, filename = _extract_page_from_archive(original_file_extension, tmp_file_name, rar_executable)
+    return cover_data, filename # cover.cover_processing(tmp_file_name, cover_data, extension)
+
+def _extract_page_from_archive(original_file_extension, tmp_file_name, rar_executable, pageNum):
+    page_data = None
+    page_name = None
+    if original_file_extension.upper() == '.CBZ':
+        cf = zipfile.ZipFile(tmp_file_name)
+        for name in cf.namelist():
+            root, ext = os.path.splitext(name)
+            if root.endswith(pageNum):
+                page_data = cf.read(name)
+                page_name = name
+                break
+    elif original_file_extension.upper() == '.CBT':
+        cf = tarfile.TarFile(tmp_file_name)
+        for name in cf.getnames():
+            root, ext = os.path.splitext(name)
+            if root.endswith(pageNum):
+                page_data = cf.extractfile(name).read()
+                page_name = name
+                break
+    elif original_file_extension.upper() == '.CBR' and use_rarfile:
+        try:
+            rarfile.UNRAR_TOOL = rar_executable
+            cf = rarfile.RarFile(tmp_file_name)
+            for name in cf.namelist():
+                root, ext = os.path.splitext(name)
+                if root.endswith(pageNum):
+                    page_data = cf.read(name)
+                    page_name = name
+                    break
+        except Exception as ex:
+            log.debug('Rarfile failed with error: {}'.format(ex))
+    return page_data, page_name

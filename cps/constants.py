@@ -161,7 +161,7 @@ def selected_roles(dictionary):
 
 # :rtype: BookMeta
 BookMeta = namedtuple('BookMeta', 'file_path, extension, title, author, cover, description, tags, series, '
-                                  'series_id, languages, publisher, pubdate, identifiers')
+                                  'series_id, languages, publisher, pubdate, identifiers, page_count')
 
 STABLE_VERSION = {'version': '0.6.21 Beta'}
 

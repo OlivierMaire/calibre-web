@@ -164,6 +164,8 @@ class _Settings(_Base):
     config_session = Column(Integer, default=1)
     config_ratelimiter = Column(Boolean, default=True)
 
+    config_use_comics_lazyload = Column(Boolean, default=False)
+
     def __repr__(self):
         return self.__class__.__name__
 

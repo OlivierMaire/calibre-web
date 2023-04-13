@@ -1790,6 +1790,9 @@ def _configuration_update_helper():
         _config_checkbox(to_save, "config_allow_reverse_proxy_header_login")
         _config_string(to_save, "config_reverse_proxy_login_header_name")
 
+        # Comics Lazyload
+        _config_checkbox(to_save, "config_use_comics_lazyload")
+
         # OAuth configuration
         if config.config_login_type == constants.LOGIN_OAUTH:
             reboot_required |= _configuration_oauth_helper(to_save)

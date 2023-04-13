@@ -18,6 +18,7 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+from inspect import isclass
 import os
 import json
 import mimetypes
@@ -27,6 +28,7 @@ import copy
 from flask import Blueprint, jsonify
 from flask import request, redirect, send_from_directory, make_response, flash, abort, url_for, Response
 from flask import session as flask_session
+from flask_api import status
 from flask_babel import gettext as _
 from flask_babel import get_locale
 from flask_login import login_user, logout_user, login_required, current_user
@@ -39,6 +41,8 @@ from sqlalchemy.sql.functions import coalesce
 
 from werkzeug.datastructures import Headers
 from werkzeug.security import generate_password_hash, check_password_hash
+
+from cps import comic
 
 from . import constants, logger, isoLanguages, services
 from . import db, ub, config, app
@@ -57,6 +61,7 @@ from .kobo_sync_status import remove_synced_book
 from .render_template import render_title_template
 from .kobo_sync_status import change_archived_books
 from . import limiter
+from .comic import use_comic_meta
 from .services.worker import WorkerThread
 from .tasks_status import render_task_status
 
@@ -1199,6 +1204,88 @@ def serve_book(book_id, book_format, anyname):
             response.headers['Accept-Ranges'] = 'bytes'
         return response
 
+@web.route("/showpage/<int:book_id>/<book_format>/<int:page_id>")
+@login_required_if_no_ano
+@viewer_required
+def serve_book_page(book_id, book_format, page_id):
+    book = calibre_db.get_book(book_id)
+    extension_upper = book_format.upper()
+    data = calibre_db.get_book_format(book_id, extension_upper)
+    if extension_upper in ['CBZ', 'CBT', 'CBR']:
+        image_binary, image_name = comic.extract_page(os.path.join(config.config_calibre_dir, book.path, data.name + "." + book_format.lower()), "." + book_format, config.config_rarfile_location, page_id)
+        response = make_response(image_binary)
+        (mime,enc) = mimetypes.guess_type(image_name)
+        response.headers.set('Content-Type', mime )
+        response.headers.set(
+            'Content-Disposition', 'attachment', filename=image_name)
+        return response
+    else:
+        return "Format Not Supported"
+
+@web.route("/stats/<int:book_id>/<book_format>", defaults={'anyname': 'None'})
+@web.route("/stats/<int:book_id>/<book_format>/<anyname>")
+@login_required_if_no_ano
+@viewer_required
+def serve_book_stats(book_id, book_format, anyname):
+    book_format = book_format.split(".")[0]
+    book = calibre_db.get_book(book_id)
+    data = calibre_db.get_book_format(book_id, book_format.upper())
+    if not data:
+        return "File not in Database"
+    log.info('Serving book stats: %s', data.name)
+    if config.config_use_google_drive:
+        return "Only Local files supported"
+    else:
+        meta = comic.get_comic_info(os.path.join(config.config_calibre_dir, book.path, data.name + "." + book_format),
+                            data.name,
+                            book_format,
+                            config.config_rarfile_location)
+        return jsonify(book_id=data.book, name=data.name, uncompressed_size=data.uncompressed_size, format = data.format, page_count = meta.page_count )
+
+
+@web.route("/bookinfo/<int:book_id>/<book_format>")
+@login_required_if_no_ano
+@viewer_required
+def serve_book_info(book_id, book_format):
+    book = calibre_db.get_book(book_id)
+    data = calibre_db.get_book_format(book_id, book_format.upper())
+    if not book or not data:
+        return "File not in Database", status.HTTP_400_BAD_REQUEST
+    if config.config_use_google_drive:
+        return "Only Local files supported", status.HTTP_400_BAD_REQUEST
+    elif not use_comic_meta:
+        return "ComicApi not installed", status.HTTP_400_BAD_REQUEST
+    else:
+        meta = comic.get_comic_info(os.path.join(config.config_calibre_dir, book.path, data.name + "." + book_format),
+                            data.name,
+                            book_format,
+                            config.config_rarfile_location)
+        return jsonify(
+                id=book.id, 
+                author_list=authors_to_dict(book.authors),
+                publisher_list=publishers_to_dict(book.publishers),
+                title=book.title,
+                has_cover=book.has_cover,
+                format = data.format, 
+                uncompressed_size=data.uncompressed_size, 
+                description= meta.description,
+                page_count = meta.page_count,
+                bookmark_url= url_for('web.set_bookmark', book_id=book_id, book_format=book_format.upper()),
+                page_url= url_for('web.serve_book_page', book_id=book_id, book_format=book_format.upper(), page_id=0)[:-1]
+                )
+
+def authors_to_dict(authors):
+    dicts = []
+    for author in authors:
+        dicts.append({"name": author.name, "link":author.link, "id": author.id})
+    return dicts
+
+def publishers_to_dict(publishers):
+    dicts = []
+    for publisher in publishers:
+        dicts.append({"name": publisher.name, "id": publisher.id})
+    return dicts
+
 
 @web.route("/download/<int:book_id>/<book_format>", defaults={'anyname': 'None'})
 @web.route("/download/<int:book_id>/<book_format>/<anyname>")
@@ -1558,9 +1645,13 @@ def read_book(book_id, book_format):
                     title = title + " - " + book.series[0].name
                     if book.series_index:
                         title = title + " #" + '{0:.2f}'.format(book.series_index).rstrip('0').rstrip('.')
-                log.debug("Start comic reader for %d", book_id)
-                return render_title_template('readcbr.html', comicfile=all_name, title=title,
-                                             extension=fileExt, bookmark=bookmark)
+                log.debug(u"Start comic reader for %d", book_id)
+                if config.config_use_google_drive or use_comic_meta != True or config.config_use_comics_lazyload == False:
+                    return render_title_template('readcbr.html', comicfile=all_name, title=title,
+                                                extension=fileExt, bookmark=bookmark)
+                else:
+                    return render_title_template('readcbr_alt.html', comicfile=all_name, title=title,
+                                                 extension=fileExt, bookmark=bookmark)
         log.debug(u"Oops! Selected book title is unavailable. File does not exist or is not accessible")
         flash(_(u"Oops! Selected book title is unavailable. File does not exist or is not accessible"),
               category="error")
