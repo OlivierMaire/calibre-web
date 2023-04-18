@@ -411,6 +411,7 @@ def change_shelf_order_cc(shelf_id, order, cc):
                                                           db.Books.id == db.books_series_link.c.book)\
         .outerjoin(db.Series) \
         .outerjoin(db.books_custom_column_links[cc.id], db.Books.id == db.books_custom_column_links[cc.id].c.book) \
+        .outerjoin(db.cc_classes[cc.id], db.books_custom_column_links[cc.id].c.value == db.cc_classes[cc.id].id) \
         .join(ub.BookShelf, ub.BookShelf.book_id == db.Books.id) \
         .filter(ub.BookShelf.shelf == shelf_id).order_by(text(order)).all()
     for index, entry in enumerate(result):
@@ -456,7 +457,7 @@ def render_show_shelf(shelf_type, shelf_id, page_no, sort_param):
                 for col in custom_columns:
                     if col.id == param_id:
                               
-                              change_shelf_order_cc(shelf_id,  'books_custom_column_'+ str(param_id)+'_link.value ' + side , col)
+                              change_shelf_order_cc(shelf_id,  'custom_column_'+ str(param_id)+'.value ' + side , col)
 
 
             page = "shelf.html"
