@@ -257,8 +257,8 @@
     $().ready(() => {
       $(".my-comics-reader").comicsreader({
         bookInfoUrl: "{{ url_for('web.serve_book_info', book_id=comicfile, book_format=extension) }}",
-        bookmark: {{ bookmark.bookmark_key if bookmark != None }},
-        useBookmarks: {{ g.user.is_authenticated | lower }},
+        bookmark: "{{ bookmark.bookmark_key if bookmark != None }}",
+        useBookmarks: "{{ current_user.is_authenticated | tojson }}",
         fetchPageUrl: "{{ url_for('web.serve_book_page', book_id=comicfile, book_format=extension, page_id=0) }}",
         csrfToken: "{{ csrf_token() }}"
       });
@@ -302,7 +302,7 @@
       bookmarkUrl: "{{ url_for('web.set_bookmark', book_id=comicfile, book_format=extension.upper()) }}",
       bookmark: "{{ bookmark.bookmark_key if bookmark != None }}",
       useBookmarks: "{{ current_user.is_authenticated | tojson }}",
-    fetchPageUrl: "{{ url_for('web.serve_book_page', book_id=comicfile, book_format=extension, page_id=0) }}",
+      fetchPageUrl: "{{ url_for('web.serve_book_page', book_id=comicfile, book_format=extension, page_id=0) }}",
       statsUrl: "{{ url_for('web.serve_book_stats', book_id=comicfile, book_format=extension) }}"
     };
 
