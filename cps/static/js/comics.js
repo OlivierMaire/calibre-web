@@ -861,7 +861,7 @@ if (window.opera) {
                 if (this.pageInfo[i]) {
                     var dblClass = "is-single-page";
                     if (this.pageInfo[i] && this.pageInfo[i].isDoublePage(this.preferences.forceRotationDetection ? this.preferences.rotateTimes : 0) ||
-                        this.pageInfo[i + 1] && this.pageInfo[i + 1].isDoublePage(this.preferences.forceRotationDetection ? this.preferences.rotateTimes : 0) || 
+                       /* this.pageInfo[i + 1] && this.pageInfo[i + 1].isDoublePage(this.preferences.forceRotationDetection ? this.preferences.rotateTimes : 0) || */
                         i == 0) {
                         dblClass = "is-double-page";
                         sideClass = "page-left";
