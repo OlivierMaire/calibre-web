@@ -996,8 +996,7 @@ if (window.opera) {
                 this.currentPage++;
             }
             else if (this.preferences.pageMode == 2) {
-                if (this.pageInfo[this.currentPage + 1].isDoublePage(this.preferences.forceRotationDetection ? this.preferences.rotateTimes : 0) ||
-                    this.pageInfo[this.currentPage + 2].isDoublePage(this.preferences.forceRotationDetection ? this.preferences.rotateTimes : 0) || 
+                    if (this.pageInfo[this.currentPage + 1].isDoublePage(this.preferences.forceRotationDetection ? this.preferences.rotateTimes : 0) ||
                     this.currentPage == 0) {
                     this.currentPage++;
                 }
