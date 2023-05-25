@@ -170,6 +170,28 @@ def set_bookmark(book_id, book_format):
     return "", 201
 
 
+
+@web.route("/ajax/firstpage/<int:book_id>/<book_format>", methods=['POST'])
+def set_firstpage(book_id, book_format):
+    value = request.form["isFirstPage"]
+    ub.session.query(ub.BookCover).filter(and_(ub.BookCover.book_id == book_id,
+                                              ub.BookCover.format == book_format)).delete()
+    
+    if not value:
+        ub.session_commit()
+        return "", 204
+    l_firstpage = ub.BookCover(book_id=book_id,
+                             format=book_format,
+                             firstpage_is_cover= True if int(value) == 1 else False )
+    
+    ub.session.merge(l_firstpage)
+    try:
+        ub.session_commit("Firstpage setting")
+    except Exception as e:
+        print(e)
+    # ub.session_commit("BookCover in book {} created".format(book_id))
+    return "", 201
+
 @web.route("/ajax/toggleread/<int:book_id>", methods=['POST'])
 @login_required
 def toggle_read(book_id):
@@ -1260,6 +1282,14 @@ def serve_book_info(book_id, book_format):
                             data.name,
                             book_format,
                             config.config_rarfile_location)
+        
+        # check if first page book is cover
+        bookcover = None
+        bookcover = ub.session.query(ub.BookCover).filter(and_(ub.BookCover.book_id == book_id,
+                                                ub.BookCover.format == book_format.upper())).first()
+        firstpage_is_cover = True
+        if bookcover:
+            firstpage_is_cover = bookcover.firstpage_is_cover
         return jsonify(
                 id=book.id, 
                 author_list=authors_to_dict(book.authors),
@@ -1271,7 +1301,8 @@ def serve_book_info(book_id, book_format):
                 description= meta.description,
                 page_count = meta.page_count,
                 bookmark_url= url_for('web.set_bookmark', book_id=book_id, book_format=book_format.upper()),
-                page_url= url_for('web.serve_book_page', book_id=book_id, book_format=book_format.upper(), page_id=0)[:-1]
+                page_url= url_for('web.serve_book_page', book_id=book_id, book_format=book_format.upper(), page_id=0)[:-1],
+                firstpage_is_cover= 1 if firstpage_is_cover else 0
                 )
 
 def authors_to_dict(authors):
@@ -1618,6 +1649,13 @@ def read_book(book_id, book_format):
         bookmark = ub.session.query(ub.Bookmark).filter(and_(ub.Bookmark.user_id == int(current_user.id),
                                                              ub.Bookmark.book_id == book_id,
                                                              ub.Bookmark.format == book_format.upper())).first()
+    # check if first page book is cover
+    bookcover = None
+    bookcover = ub.session.query(ub.BookCover).filter(and_(ub.BookCover.book_id == book_id,
+                                               ub.BookCover.format == book_format.upper())).first()
+    firstpage_is_cover = True
+    if bookcover != None:
+        firstpage_is_cover = bookcover.firstpage_is_cover
     if book_format.lower() == "epub":
         log.debug("Start epub reader for %d", book_id)
         return render_title_template('read.html', bookid=book_id, title=book.title, bookmark=bookmark)
@@ -1648,10 +1686,10 @@ def read_book(book_id, book_format):
                 log.debug(u"Start comic reader for %d", book_id)
                 if config.config_use_google_drive or use_comic_meta != True or config.config_use_comics_lazyload == False:
                     return render_title_template('readcbr.html', comicfile=all_name, title=title,
-                                                extension=fileExt, bookmark=bookmark)
+                                                extension=fileExt, bookmark=bookmark, firstpage_is_cover=firstpage_is_cover )
                 else:
                     return render_title_template('readcbr_alt.html', comicfile=all_name, title=title,
-                                                 extension=fileExt, bookmark=bookmark)
+                                                 extension=fileExt, bookmark=bookmark, firstpage_is_cover=firstpage_is_cover)
         log.debug(u"Oops! Selected book title is unavailable. File does not exist or is not accessible")
         flash(_(u"Oops! Selected book title is unavailable. File does not exist or is not accessible"),
               category="error")

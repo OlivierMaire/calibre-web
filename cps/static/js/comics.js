@@ -404,8 +404,15 @@ if (window.opera) {
                             publishers: result.publisher_list,
                             has_cover: result.has_cover,
                             description: result.description,
-                            authors: result.author_list
+                            authors: result.author_list,
+                            firstpageIsCover: result.firstpage_is_cover
                         };
+
+                        if (!this.preferences.firstpageCover)
+                        this.preferences.firstpageCover = 1;
+
+                        this.preferences.firstpageCover = this.bookInfo.firstpageIsCover;
+                        this.savePreferences();
 
                         console.log(this.bookInfo);
                         resolve();
@@ -450,7 +457,7 @@ if (window.opera) {
             } else if (this.preferences.pageMode == 2) {
                 if (this.pageInfo[this.currentPage]?.isDoublePage(this.preferences.forceRotationDetection ? this.preferences.rotateTimes : 0) ||
                     this.pageInfo[this.currentPage + 1]?.isDoublePage(this.preferences.forceRotationDetection ? this.preferences.rotateTimes : 0) || 
-                    this.currentPage == 0) {
+                    (this.currentPage == 0 && this.preferences.firstpageCover)) {
                     currentPageText = this.currentPage + 1;
                     activepages.push(this.currentPage);
                 } else {
@@ -548,7 +555,7 @@ if (window.opera) {
                 this.$elem.find(".sidebar .pages-list").addClass("double-view");
                 if (this.pageInfo[this.currentPage].isDoublePage(this.preferences.forceRotationDetection ? this.preferences.rotateTimes : 0) ||
                     this.pageInfo[this.currentPage + 1].isDoublePage(this.preferences.forceRotationDetection ? this.preferences.rotateTimes : 0) || 
-                    this.currentPage == 0) {
+                    (this.currentPage == 0 && this.preferences.firstpageCover)) {
                     this.renderSinglePage();
                 }
                 else {
@@ -862,7 +869,7 @@ if (window.opera) {
                     var dblClass = "is-single-page";
                     if (this.pageInfo[i] && this.pageInfo[i].isDoublePage(this.preferences.forceRotationDetection ? this.preferences.rotateTimes : 0) ||
                        /* this.pageInfo[i + 1] && this.pageInfo[i + 1].isDoublePage(this.preferences.forceRotationDetection ? this.preferences.rotateTimes : 0) || */
-                        i == 0) {
+                        (i == 0 && this.preferences.firstpageCover)) {
                         dblClass = "is-double-page";
                         sideClass = "page-left";
                     }
@@ -895,6 +902,17 @@ if (window.opera) {
 
             this.$elem.find(".sidebar").scrollTop(0);
             this.$elem.find(".sidebar").scrollTop(this.$elem.find(".sidebar .pages-list a.active").position()?.top);
+        },
+        updateFirstPageCover: function() {
+            $.ajax(this.options.firstCoverUrl, {
+                method: "post",
+                data: {
+                    csrf_token: this.options.csrfToken,
+                    isFirstPage: this.preferences.firstpageCover
+                }
+            }).fail(function (xhr, status, error) {
+                console.error(error);
+            });
         },
         savePreferences: function () {
             localStorage.comicsReaderPreferences = JSON.stringify(this.preferences);
@@ -932,10 +950,13 @@ if (window.opera) {
             value = /^\d+$/.test(value) ? parseInt(value) : value;
             self.preferences[elem.name] = value;
 
-
+            console.log("preference changed: " + elem.name + "="+ value );
             self.savePreferences();
             if (elem.name == "theme") {
                 self.setTheme();
+            }
+            if  (elem.name == "firstpageCover") {
+                self.updateFirstPageCover();
             }
             self.applyScrollbarSettings();
             self.applyRenderScale();
@@ -997,7 +1018,7 @@ if (window.opera) {
             }
             else if (this.preferences.pageMode == 2) {
                     if (this.pageInfo[this.currentPage + 1].isDoublePage(this.preferences.forceRotationDetection ? this.preferences.rotateTimes : 0) ||
-                    this.currentPage == 0) {
+                    (this.currentPage == 0 && this.preferences.firstpageCover)) {
                     this.currentPage++;
                 }
                 else {
@@ -1068,6 +1089,7 @@ if (window.opera) {
         bookmark: 0,
         useBookmarks: false,
         csrfToken: "",
+        firstCoverUrl: "",
 
         hflip: false,
         vflip: false,

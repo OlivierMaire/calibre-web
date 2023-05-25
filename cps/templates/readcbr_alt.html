@@ -243,6 +243,17 @@
                     </div>
                   </td>
                 </tr>
+                <tr>
+                  <th>{{_('First Page Is Cover')}}:</th>
+                  <td>
+                    <div class="inputs">
+                      <label for="firstpageCoverOff"><input type="radio" id="firstpageCoverOff" name="firstpageCover" value="0" />
+                        {{_('No')}}</label>
+                      <label for="firstpageCoverOn"><input type="radio" id="firstpageCoverOn" name="firstpageCover" value="1" />
+                        {{_('Yes')}}</label>
+                    </div>
+                  </td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -260,7 +271,8 @@
         bookmark: "{{ bookmark.bookmark_key if bookmark != None }}",
         useBookmarks: "{{ current_user.is_authenticated | tojson }}",
         fetchPageUrl: "{{ url_for('web.serve_book_page', book_id=comicfile, book_format=extension, page_id=0) }}",
-        csrfToken: "{{ csrf_token() }}"
+        csrfToken: "{{ csrf_token() }}",
+        firstCoverUrl: "{{ url_for('web.set_firstpage', book_id=comicfile, book_format=extension) }}",
       });
     });
   </script>

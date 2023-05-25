@@ -402,6 +402,14 @@ class Bookmark(Base):
     format = Column(String(collation='NOCASE'))
     bookmark_key = Column(String)
 
+class BookCover(Base):
+    __tablename__ = 'book_cover'
+
+    id = Column(Integer, primary_key=True)
+    book_id = Column(Integer)
+    format = Column(String(collation='NOCASE'))
+    firstpage_is_cover = Column(Boolean, default=True)
+
 
 # Baseclass representing books that are archived on the user's Kobo device.
 class ArchivedBook(Base):
