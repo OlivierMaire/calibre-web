@@ -449,7 +449,8 @@ if (window.opera) {
                 activepages.push(this.currentPage);
             } else if (this.preferences.pageMode == 2) {
                 if (this.pageInfo[this.currentPage]?.isDoublePage(this.preferences.forceRotationDetection ? this.preferences.rotateTimes : 0) ||
-                    this.pageInfo[this.currentPage + 1]?.isDoublePage(this.preferences.forceRotationDetection ? this.preferences.rotateTimes : 0)) {
+                    this.pageInfo[this.currentPage + 1]?.isDoublePage(this.preferences.forceRotationDetection ? this.preferences.rotateTimes : 0) || 
+                    this.currentPage == 0) {
                     currentPageText = this.currentPage + 1;
                     activepages.push(this.currentPage);
                 } else {
@@ -546,7 +547,8 @@ if (window.opera) {
             else if (this.preferences.pageMode == 2) {
                 this.$elem.find(".sidebar .pages-list").addClass("double-view");
                 if (this.pageInfo[this.currentPage].isDoublePage(this.preferences.forceRotationDetection ? this.preferences.rotateTimes : 0) ||
-                    this.pageInfo[this.currentPage + 1].isDoublePage(this.preferences.forceRotationDetection ? this.preferences.rotateTimes : 0)) {
+                    this.pageInfo[this.currentPage + 1].isDoublePage(this.preferences.forceRotationDetection ? this.preferences.rotateTimes : 0) || 
+                    this.currentPage == 0) {
                     this.renderSinglePage();
                 }
                 else {
@@ -859,7 +861,8 @@ if (window.opera) {
                 if (this.pageInfo[i]) {
                     var dblClass = "is-single-page";
                     if (this.pageInfo[i] && this.pageInfo[i].isDoublePage(this.preferences.forceRotationDetection ? this.preferences.rotateTimes : 0) ||
-                        this.pageInfo[i + 1] && this.pageInfo[i + 1].isDoublePage(this.preferences.forceRotationDetection ? this.preferences.rotateTimes : 0)) {
+                        this.pageInfo[i + 1] && this.pageInfo[i + 1].isDoublePage(this.preferences.forceRotationDetection ? this.preferences.rotateTimes : 0) || 
+                        i == 0) {
                         dblClass = "is-double-page";
                         sideClass = "page-left";
                     }
@@ -967,9 +970,11 @@ if (window.opera) {
             if (this.preferences.pageMode == 1) {
                 this.currentPage--;
             }
-            else if (this.preferences.pageMode == 2) {
-                if (this.pageInfo[this.currentPage - 1].isDoublePage(this.preferences.forceRotationDetection ? this.preferences.rotateTimes : 0) ||
-                    this.pageInfo[this.currentPage - 2].isDoublePage(this.preferences.forceRotationDetection ? this.preferences.rotateTimes : 0)) {
+            else if (this.preferences.pageMode == 2 ) {
+                if ( this.currentPage == 1 || 
+                    this.pageInfo[this.currentPage - 1].isDoublePage(this.preferences.forceRotationDetection ? this.preferences.rotateTimes : 0) ||
+                    this.pageInfo[this.currentPage - 2].isDoublePage(this.preferences.forceRotationDetection ? this.preferences.rotateTimes : 0) 
+                   ) {
                     this.currentPage--;
                 }
                 else {
@@ -991,7 +996,8 @@ if (window.opera) {
             }
             else if (this.preferences.pageMode == 2) {
                 if (this.pageInfo[this.currentPage + 1].isDoublePage(this.preferences.forceRotationDetection ? this.preferences.rotateTimes : 0) ||
-                    this.pageInfo[this.currentPage + 2].isDoublePage(this.preferences.forceRotationDetection ? this.preferences.rotateTimes : 0)) {
+                    this.pageInfo[this.currentPage + 2].isDoublePage(this.preferences.forceRotationDetection ? this.preferences.rotateTimes : 0) || 
+                    this.currentPage == 0) {
                     this.currentPage++;
                 }
                 else {
