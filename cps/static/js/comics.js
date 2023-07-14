@@ -132,7 +132,7 @@ if (window.opera) {
                 }
 
                 this.useBookmarks = false;
-                if (this.bookmarkUrl && this.options.useBookmarks == true && this.options.csrfToken) {
+                if (this.bookmarkUrl && this.options.useBookmarks === "true" && this.options.csrfToken) {
                     this.csrfToken = this.options.csrfToken;
                     this.useBookmarks = true;
                     this.currentPage = parseInt(this.options.bookmark);
