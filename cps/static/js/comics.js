@@ -135,7 +135,7 @@ if (window.opera) {
                 if (this.bookmarkUrl && this.options.useBookmarks === "true" && this.options.csrfToken) {
                     this.csrfToken = this.options.csrfToken;
                     this.useBookmarks = true;
-                    this.currentPage = parseInt(this.options.bookmark === '' ? 0 : this.options.bookmark);
+                    this.currentPage = +this.options.bookmark;
                 }
 
                 this.loadBook();
@@ -409,7 +409,7 @@ if (window.opera) {
                         };
 
                         if (!this.preferences.firstpageCover)
-                        this.preferences.firstpageCover = 1;
+                            this.preferences.firstpageCover = 1;
 
                         this.preferences.firstpageCover = this.bookInfo.firstpageIsCover;
                         this.savePreferences();
@@ -456,7 +456,7 @@ if (window.opera) {
                 activepages.push(this.currentPage);
             } else if (this.preferences.pageMode == 2) {
                 if (this.pageInfo[this.currentPage]?.isDoublePage(this.preferences.forceRotationDetection ? this.preferences.rotateTimes : 0) ||
-                    this.pageInfo[this.currentPage + 1]?.isDoublePage(this.preferences.forceRotationDetection ? this.preferences.rotateTimes : 0) || 
+                    this.pageInfo[this.currentPage + 1]?.isDoublePage(this.preferences.forceRotationDetection ? this.preferences.rotateTimes : 0) ||
                     (this.currentPage == 0 && this.preferences.firstpageCover)) {
                     currentPageText = this.currentPage + 1;
                     activepages.push(this.currentPage);
@@ -490,7 +490,7 @@ if (window.opera) {
                     rgb = { r: 0, g: 0, b: 0 },
                     count = 0;
 
-                var context = canvas.getContext("2d");
+                var context = canvas.getContext("2d", { willReadFrequently: true });
                 var borderColor = defaultRGB;
 
                 var countWhite = 0;
@@ -554,7 +554,7 @@ if (window.opera) {
             else if (this.preferences.pageMode == 2) {
                 this.$elem.find(".sidebar .pages-list").addClass("double-view");
                 if (this.pageInfo[this.currentPage].isDoublePage(this.preferences.forceRotationDetection ? this.preferences.rotateTimes : 0) ||
-                    this.pageInfo[this.currentPage + 1].isDoublePage(this.preferences.forceRotationDetection ? this.preferences.rotateTimes : 0) || 
+                    this.pageInfo[this.currentPage + 1].isDoublePage(this.preferences.forceRotationDetection ? this.preferences.rotateTimes : 0) ||
                     (this.currentPage == 0 && this.preferences.firstpageCover)) {
                     this.renderSinglePage();
                 }
@@ -596,7 +596,7 @@ if (window.opera) {
         renderDoublePage: function () {
 
             var canvas = document.createElement('canvas');
-            var context = canvas.getContext("2d");
+            var context = canvas.getContext("2d", { willReadFrequently: true });
 
             let preferences = this.preferences;
             let pageInfo = this.pageInfo[this.currentPage];
@@ -679,7 +679,7 @@ if (window.opera) {
         },
         renderPageCanvas: function (pageIndex) {
             var canvas = document.createElement('canvas');
-            var context = canvas.getContext("2d");
+            var context = canvas.getContext("2d", { willReadFrequently: true });
             let preferences = this.preferences;
             let pageInfo = this.pageInfo[pageIndex];
             let renderView = this.$elem.find(".render-view");
@@ -868,7 +868,7 @@ if (window.opera) {
                 if (this.pageInfo[i]) {
                     var dblClass = "is-single-page";
                     if (this.pageInfo[i] && this.pageInfo[i].isDoublePage(this.preferences.forceRotationDetection ? this.preferences.rotateTimes : 0) ||
-                       /* this.pageInfo[i + 1] && this.pageInfo[i + 1].isDoublePage(this.preferences.forceRotationDetection ? this.preferences.rotateTimes : 0) || */
+                        /* this.pageInfo[i + 1] && this.pageInfo[i + 1].isDoublePage(this.preferences.forceRotationDetection ? this.preferences.rotateTimes : 0) || */
                         (i == 0 && this.preferences.firstpageCover)) {
                         dblClass = "is-double-page";
                         sideClass = "page-left";
@@ -903,7 +903,7 @@ if (window.opera) {
             this.$elem.find(".sidebar").scrollTop(0);
             this.$elem.find(".sidebar").scrollTop(this.$elem.find(".sidebar .pages-list a.active").position()?.top);
         },
-        updateFirstPageCover: function() {
+        updateFirstPageCover: function () {
             $.ajax(this.options.firstCoverUrl, {
                 method: "post",
                 data: {
@@ -950,12 +950,12 @@ if (window.opera) {
             value = /^\d+$/.test(value) ? parseInt(value) : value;
             self.preferences[elem.name] = value;
 
-            console.log("preference changed: " + elem.name + "="+ value );
+            console.log("preference changed: " + elem.name + "=" + value);
             self.savePreferences();
             if (elem.name == "theme") {
                 self.setTheme();
             }
-            if  (elem.name == "firstpageCover") {
+            if (elem.name == "firstpageCover") {
                 self.updateFirstPageCover();
             }
             self.applyScrollbarSettings();
@@ -991,11 +991,11 @@ if (window.opera) {
             if (this.preferences.pageMode == 1) {
                 this.currentPage--;
             }
-            else if (this.preferences.pageMode == 2 ) {
-                if ( this.currentPage == 1 || 
+            else if (this.preferences.pageMode == 2) {
+                if (this.currentPage == 1 ||
                     this.pageInfo[this.currentPage - 1].isDoublePage(this.preferences.forceRotationDetection ? this.preferences.rotateTimes : 0) ||
-                    this.pageInfo[this.currentPage - 2].isDoublePage(this.preferences.forceRotationDetection ? this.preferences.rotateTimes : 0) 
-                   ) {
+                    this.pageInfo[this.currentPage - 2].isDoublePage(this.preferences.forceRotationDetection ? this.preferences.rotateTimes : 0)
+                ) {
                     this.currentPage--;
                 }
                 else {
@@ -1017,7 +1017,7 @@ if (window.opera) {
                 this.currentPage++;
             }
             else if (this.preferences.pageMode == 2) {
-                    if (this.pageInfo[this.currentPage + 1].isDoublePage(this.preferences.forceRotationDetection ? this.preferences.rotateTimes : 0) ||
+                if (this.pageInfo[this.currentPage + 1].isDoublePage(this.preferences.forceRotationDetection ? this.preferences.rotateTimes : 0) ||
                     (this.currentPage == 0 && this.preferences.firstpageCover)) {
                     this.currentPage++;
                 }
