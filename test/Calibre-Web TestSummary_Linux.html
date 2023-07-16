@@ -37,20 +37,20 @@
       <div class="row">
         <div class="col-xs-6 col-md-6 col-sm-offset-3" style="margin-top:50px;">
             
-            <p class='text-justify attribute'><strong>Start Time: </strong>2023-03-26 21:21:07</p>
+            <p class='text-justify attribute'><strong>Start Time: </strong>2023-06-18 11:18:49</p>
             
         </div>
       </div>
       <div class="row">
         <div class="col-xs-6 col-md-6 col-sm-offset-3">
             
-            <p class='text-justify attribute'><strong>Stop Time: </strong>2023-03-27 04:13:39</p>
+            <p class='text-justify attribute'><strong>Stop Time: </strong>2023-06-18 17:27:42</p>
             
         </div>
       </div>
       <div class="row">
         <div class="col-xs-6 col-md-6 col-sm-offset-3">
-           <p class='text-justify attribute'><strong>Duration: </strong>5h 49 min</p>
+           <p class='text-justify attribute'><strong>Duration: </strong>5h 10 min</p>
         </div>
       </div>
       </div>
@@ -473,13 +473,13 @@
 
     <tr id="su" class="passClass">
         <td>TestCli</td>
-        <td class="text-center">12</td>
-        <td class="text-center">12</td>
+        <td class="text-center">13</td>
+        <td class="text-center">13</td>
         <td class="text-center">0</td>
         <td class="text-center">0</td>
         <td class="text-center">0</td>
         <td class="text-center">
-            <a onclick="showClassDetail('c4', 12)">Detail</a>
+            <a onclick="showClassDetail('c4', 13)">Detail</a>
         </td>
     </tr>
 
@@ -568,7 +568,7 @@
     
         <tr id='pt4.10' class='hiddenRow bg-success'>
             <td>
-                <div class='testcase'>TestCli - test_no_database</div>
+                <div class='testcase'>TestCli - test_logfile</div>
             </td>
             <td colspan='6' align='center'>PASS</td>
         </tr>
@@ -577,7 +577,7 @@
     
         <tr id='pt4.11' class='hiddenRow bg-success'>
             <td>
-                <div class='testcase'>TestCli - test_settingsdb_not_writeable</div>
+                <div class='testcase'>TestCli - test_no_database</div>
             </td>
             <td colspan='6' align='center'>PASS</td>
         </tr>
@@ -585,6 +585,15 @@
     
     
         <tr id='pt4.12' class='hiddenRow bg-success'>
+            <td>
+                <div class='testcase'>TestCli - test_settingsdb_not_writeable</div>
+            </td>
+            <td colspan='6' align='center'>PASS</td>
+        </tr>
+    
+    
+    
+        <tr id='pt4.13' class='hiddenRow bg-success'>
             <td>
                 <div class='testcase'>TestCli - test_writeonly_static_files</div>
             </td>
@@ -1175,13 +1184,13 @@
 
     <tr id="su" class="skipClass">
         <td>TestEditBooks</td>
-        <td class="text-center">36</td>
+        <td class="text-center">37</td>
         <td class="text-center">35</td>
         <td class="text-center">0</td>
         <td class="text-center">0</td>
-        <td class="text-center">1</td>
+        <td class="text-center">2</td>
         <td class="text-center">
-            <a onclick="showClassDetail('c13', 36)">Detail</a>
+            <a onclick="showClassDetail('c13', 37)">Detail</a>
         </td>
     </tr>
 
@@ -1360,7 +1369,7 @@
     
         <tr id="st13.20" class="none bg-warning">
             <td>
-                <div class='testcase'>TestEditBooks - test_rename_uppercase_lowercase</div>
+                <div class='testcase'>TestEditBooks - test_rename_upper_lowercase</div>
             </td>
             <td colspan='6'>
                 <div class="text-center">
@@ -1374,6 +1383,32 @@
                                 aria-hidden="true">&times;</span></button>
                     </div>
                     <div class="text-left pull-left">
+                        <pre class="text-left">For some reason it works, but during test it fails, only if executed in debugger it works</pre>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <!--css div popup end-->
+            </td>
+        </tr>
+    
+    
+    
+        <tr id="st13.21" class="none bg-warning">
+            <td>
+                <div class='testcase'>TestEditBooks - test_rename_uppercase_lowercase</div>
+            </td>
+            <td colspan='6'>
+                <div class="text-center">
+                    <a class="popup_link text-center" onfocus='blur()' onclick="showTestDetail('div_st13.21')">SKIP</a>
+                </div>
+                <!--css div popup start-->
+                <div id="div_st13.21" class="popup_window test_output" style="display:none;">
+                    <div class='close_button pull-right'>
+                        <button type="button" class="close" aria-label="Close" onfocus="this.blur();"
+                                onclick="document.getElementById('div_st13.21').style.display='none'"><span
+                                aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="text-left pull-left">
                         <pre class="text-left">Not Implemented</pre>
                     </div>
                     <div class="clearfix"></div>
@@ -1384,7 +1419,7 @@
     
     
     
-        <tr id='pt13.21' class='hiddenRow bg-success'>
+        <tr id='pt13.22' class='hiddenRow bg-success'>
             <td>
                 <div class='testcase'>TestEditBooks - test_typeahead_author</div>
             </td>
@@ -1393,7 +1428,7 @@
     
     
     
-        <tr id='pt13.22' class='hiddenRow bg-success'>
+        <tr id='pt13.23' class='hiddenRow bg-success'>
             <td>
                 <div class='testcase'>TestEditBooks - test_typeahead_functions</div>
             </td>
@@ -1402,7 +1437,7 @@
     
     
     
-        <tr id='pt13.23' class='hiddenRow bg-success'>
+        <tr id='pt13.24' class='hiddenRow bg-success'>
             <td>
                 <div class='testcase'>TestEditBooks - test_typeahead_language</div>
             </td>
@@ -1411,7 +1446,7 @@
     
     
     
-        <tr id='pt13.24' class='hiddenRow bg-success'>
+        <tr id='pt13.25' class='hiddenRow bg-success'>
             <td>
                 <div class='testcase'>TestEditBooks - test_typeahead_publisher</div>
             </td>
@@ -1420,7 +1455,7 @@
     
     
     
-        <tr id='pt13.25' class='hiddenRow bg-success'>
+        <tr id='pt13.26' class='hiddenRow bg-success'>
             <td>
                 <div class='testcase'>TestEditBooks - test_typeahead_series</div>
             </td>
@@ -1429,7 +1464,7 @@
     
     
     
-        <tr id='pt13.26' class='hiddenRow bg-success'>
+        <tr id='pt13.27' class='hiddenRow bg-success'>
             <td>
                 <div class='testcase'>TestEditBooks - test_typeahead_tag</div>
             </td>
@@ -1438,7 +1473,7 @@
     
     
     
-        <tr id='pt13.27' class='hiddenRow bg-success'>
+        <tr id='pt13.28' class='hiddenRow bg-success'>
             <td>
                 <div class='testcase'>TestEditBooks - test_upload_book_cbr</div>
             </td>
@@ -1447,7 +1482,7 @@
     
     
     
-        <tr id='pt13.28' class='hiddenRow bg-success'>
+        <tr id='pt13.29' class='hiddenRow bg-success'>
             <td>
                 <div class='testcase'>TestEditBooks - test_upload_book_cbt</div>
             </td>
@@ -1456,7 +1491,7 @@
     
     
     
-        <tr id='pt13.29' class='hiddenRow bg-success'>
+        <tr id='pt13.30' class='hiddenRow bg-success'>
             <td>
                 <div class='testcase'>TestEditBooks - test_upload_book_cbz</div>
             </td>
@@ -1465,7 +1500,7 @@
     
     
     
-        <tr id='pt13.30' class='hiddenRow bg-success'>
+        <tr id='pt13.31' class='hiddenRow bg-success'>
             <td>
                 <div class='testcase'>TestEditBooks - test_upload_book_epub</div>
             </td>
@@ -1474,7 +1509,7 @@
     
     
     
-        <tr id='pt13.31' class='hiddenRow bg-success'>
+        <tr id='pt13.32' class='hiddenRow bg-success'>
             <td>
                 <div class='testcase'>TestEditBooks - test_upload_book_fb2</div>
             </td>
@@ -1483,7 +1518,7 @@
     
     
     
-        <tr id='pt13.32' class='hiddenRow bg-success'>
+        <tr id='pt13.33' class='hiddenRow bg-success'>
             <td>
                 <div class='testcase'>TestEditBooks - test_upload_book_lit</div>
             </td>
@@ -1492,7 +1527,7 @@
     
     
     
-        <tr id='pt13.33' class='hiddenRow bg-success'>
+        <tr id='pt13.34' class='hiddenRow bg-success'>
             <td>
                 <div class='testcase'>TestEditBooks - test_upload_book_mobi</div>
             </td>
@@ -1501,7 +1536,7 @@
     
     
     
-        <tr id='pt13.34' class='hiddenRow bg-success'>
+        <tr id='pt13.35' class='hiddenRow bg-success'>
             <td>
                 <div class='testcase'>TestEditBooks - test_upload_book_pdf</div>
             </td>
@@ -1510,7 +1545,7 @@
     
     
     
-        <tr id='pt13.35' class='hiddenRow bg-success'>
+        <tr id='pt13.36' class='hiddenRow bg-success'>
             <td>
                 <div class='testcase'>TestEditBooks - test_upload_cbz_coverformats</div>
             </td>
@@ -1519,7 +1554,7 @@
     
     
     
-        <tr id='pt13.36' class='hiddenRow bg-success'>
+        <tr id='pt13.37' class='hiddenRow bg-success'>
             <td>
                 <div class='testcase'>TestEditBooks - test_upload_cover_hdd</div>
             </td>
@@ -1868,12 +1903,12 @@
     
 
 
-    <tr id="su" class="errorClass">
+    <tr id="su" class="passClass">
         <td>TestEditBooksOnGdrive</td>
         <td class="text-center">18</td>
-        <td class="text-center">17</td>
+        <td class="text-center">18</td>
         <td class="text-center">0</td>
-        <td class="text-center">1</td>
+        <td class="text-center">0</td>
         <td class="text-center">0</td>
         <td class="text-center">
             <a onclick="showClassDetail('c18', 18)">Detail</a>
@@ -2017,31 +2052,11 @@
     
     
     
-        <tr id="et18.16" class="none bg-info">
+        <tr id='pt18.16' class='hiddenRow bg-success'>
             <td>
                 <div class='testcase'>TestEditBooksOnGdrive - test_edit_title</div>
             </td>
-            <td colspan='6'>
-                <div class="text-center">
-                    <a class="popup_link text-center" onfocus='blur()' onclick="showTestDetail('div_et18.16')">ERROR</a>
-                </div>
-                <!--css div popup start-->
-                <div id="div_et18.16" class="popup_window test_output" style="display:block;">
-                    <div class='close_button pull-right'>
-                        <button type="button" class="close" aria-label="Close" onfocus="this.blur();"
-                                onclick="document.getElementById('div_et18.16').style.display='none'"><span
-                                aria-hidden="true">&times;</span></button>
-                    </div>
-                    <div class="text-left pull-left">
-                        <pre class="text-left">Traceback (most recent call last):
-  File &#34;/home/ozzie/Development/calibre-web-test/test/test_edit_ebooks_gdrive.py&#34;, line 189, in test_edit_title
-    self.assertEqual(&#39;The camicdemo&#39;, books[1][8][&#39;title&#39;])
-IndexError: list index out of range</pre>
-                    </div>
-                    <div class="clearfix"></div>
-                </div>
-                <!--css div popup end-->
-            </td>
+            <td colspan='6' align='center'>PASS</td>
         </tr>
     
     
@@ -3464,43 +3479,50 @@ IndexError: list index out of range</pre>
     
 
 
-    <tr id="su" class="passClass">
-        <td>TestPipInstall</td>
-        <td class="text-center">3</td>
-        <td class="text-center">3</td>
+    <tr id="su" class="errorClass">
+        <td>_FailedTest</td>
+        <td class="text-center">1</td>
         <td class="text-center">0</td>
         <td class="text-center">0</td>
+        <td class="text-center">1</td>
         <td class="text-center">0</td>
         <td class="text-center">
-            <a onclick="showClassDetail('c38', 3)">Detail</a>
+            <a onclick="showClassDetail('c38', 1)">Detail</a>
         </td>
     </tr>
 
     
     
-        <tr id='pt38.1' class='hiddenRow bg-success'>
+        <tr id="et38.1" class="none bg-info">
             <td>
-                <div class='testcase'>TestPipInstall - test_command_start</div>
+                <div class='testcase'>_FailedTest - test_pip_install</div>
             </td>
-            <td colspan='6' align='center'>PASS</td>
-        </tr>
-    
-    
-    
-        <tr id='pt38.2' class='hiddenRow bg-success'>
-            <td>
-                <div class='testcase'>TestPipInstall - test_foldername_database_location</div>
+            <td colspan='6'>
+                <div class="text-center">
+                    <a class="popup_link text-center" onfocus='blur()' onclick="showTestDetail('div_et38.1')">ERROR</a>
+                </div>
+                <!--css div popup start-->
+                <div id="div_et38.1" class="popup_window test_output" style="display:block;">
+                    <div class='close_button pull-right'>
+                        <button type="button" class="close" aria-label="Close" onfocus="this.blur();"
+                                onclick="document.getElementById('div_et38.1').style.display='none'"><span
+                                aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="text-left pull-left">
+                        <pre class="text-left">ImportError: Failed to import test module: test_pip_install
+Traceback (most recent call last):
+  File &#34;/usr/lib/python3.10/unittest/loader.py&#34;, line 436, in _find_test_path
+    module = self._get_module_from_name(name)
+  File &#34;/usr/lib/python3.10/unittest/loader.py&#34;, line 377, in _get_module_from_name
+    __import__(name)
+  File &#34;/home/ozzie/Development/calibre-web-test/test/test_pip_install.py&#34;, line 14, in &lt;module&gt;
+    from build import make_release
+ModuleNotFoundError: No module named &#39;build&#39;</pre>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <!--css div popup end-->
             </td>
-            <td colspan='6' align='center'>PASS</td>
-        </tr>
-    
-    
-    
-        <tr id='pt38.3' class='hiddenRow bg-success'>
-            <td>
-                <div class='testcase'>TestPipInstall - test_module_start</div>
-            </td>
-            <td colspan='6' align='center'>PASS</td>
         </tr>
     
     
@@ -3928,11 +3950,11 @@ IndexError: list index out of range</pre>
     
 
 
-    <tr id="su" class="failClass">
+    <tr id="su" class="skipClass">
         <td>TestThumbnails</td>
         <td class="text-center">8</td>
-        <td class="text-center">6</td>
-        <td class="text-center">1</td>
+        <td class="text-center">7</td>
+        <td class="text-center">0</td>
         <td class="text-center">0</td>
         <td class="text-center">1</td>
         <td class="text-center">
@@ -4005,31 +4027,11 @@ IndexError: list index out of range</pre>
     
     
     
-        <tr id="ft45.8" class="none bg-danger">
+        <tr id='pt45.8' class='hiddenRow bg-success'>
             <td>
                 <div class='testcase'>TestThumbnails - test_sideloaded_book</div>
             </td>
-            <td colspan='6'>
-                <div class="text-center">
-                    <a class="popup_link text-center" onfocus='blur()' onclick="showTestDetail('div_ft45.8')">FAIL</a>
-                </div>
-                <!--css div popup start-->
-                <div id="div_ft45.8" class="popup_window test_output" style="display:block;">
-                    <div class='close_button pull-right'>
-                        <button type="button" class="close" aria-label="Close" onfocus="this.blur();"
-                                onclick="document.getElementById('div_ft45.8').style.display='none'"><span
-                                aria-hidden="true">&times;</span></button>
-                    </div>
-                    <div class="text-left pull-left">
-                        <pre class="text-left">Traceback (most recent call last):
-  File &#34;/home/ozzie/Development/calibre-web-test/test/test_thumbnails.py&#34;, line 310, in test_sideloaded_book
-    self.assertAlmostEqual(diff(BytesIO(list_cover), BytesIO(old_list_cover), delete_diff_file=True), 0.0,
-AssertionError: 0.007374011826953003 != 0.0 within 0.0001 delta (0.007374011826953003 difference)</pre>
-                    </div>
-                    <div class="clearfix"></div>
-                </div>
-                <!--css div popup end-->
-            </td>
+            <td colspan='6' align='center'>PASS</td>
         </tr>
     
     
@@ -5105,9 +5107,9 @@ AssertionError: 0.007374011826953003 != 0.0 within 0.0001 delta (0.0073740118269
         <td>Total</td>
         <td>455</td>
         <td>446</td>
+        <td>0</td>
         <td>1</td>
-        <td>1</td>
-        <td>7</td>
+        <td>8</td>
         <td>&nbsp;</td>
     </tr>
 </table>
@@ -5135,7 +5137,7 @@ AssertionError: 0.007374011826953003 != 0.0 within 0.0001 delta (0.0073740118269
           
             <tr>
               <th>Platform</th>
-              <td>Linux 5.19.0-35-generic #36~22.04.1-Ubuntu SMP PREEMPT_DYNAMIC Fri Feb 17 15:17:25 UTC 2 x86_64 x86_64</td>
+              <td>Linux 5.19.0-45-generic #46~22.04.1-Ubuntu SMP PREEMPT_DYNAMIC Wed Jun 7 15:06:04 UTC 20 x86_64 x86_64</td>
               <td>Basic</td>
             </tr>
           
@@ -5164,12 +5166,6 @@ AssertionError: 0.007374011826953003 != 0.0 within 0.0001 delta (0.0073740118269
             </tr>
           
             <tr>
-              <th>backports-abc</th>
-              <td>0.5</td>
-              <td>Basic</td>
-            </tr>
-          
-            <tr>
               <th>chardet</th>
               <td>4.0.0</td>
               <td>Basic</td>
@@ -5177,7 +5173,7 @@ AssertionError: 0.007374011826953003 != 0.0 within 0.0001 delta (0.0073740118269
           
             <tr>
               <th>Flask</th>
-              <td>2.1.3</td>
+              <td>2.3.2</td>
               <td>Basic</td>
             </tr>
           
@@ -5189,7 +5185,7 @@ AssertionError: 0.007374011826953003 != 0.0 within 0.0001 delta (0.0073740118269
           
             <tr>
               <th>Flask-Limiter</th>
-              <td>3.3.0</td>
+              <td>3.3.1</td>
               <td>Basic</td>
             </tr>
           
@@ -5237,13 +5233,13 @@ AssertionError: 0.007374011826953003 != 0.0 within 0.0001 delta (0.0073740118269
           
             <tr>
               <th>pyasn1</th>
-              <td>0.4.8</td>
+              <td>0.5.0</td>
               <td>Basic</td>
             </tr>
           
             <tr>
               <th>pypdf</th>
-              <td>3.5.2</td>
+              <td>3.7.1</td>
               <td>Basic</td>
             </tr>
           
@@ -5261,7 +5257,7 @@ AssertionError: 0.007374011826953003 != 0.0 within 0.0001 delta (0.0073740118269
           
             <tr>
               <th>SQLAlchemy</th>
-              <td>1.4.47</td>
+              <td>1.4.48</td>
               <td>Basic</td>
             </tr>
           
@@ -5285,13 +5281,13 @@ AssertionError: 0.007374011826953003 != 0.0 within 0.0001 delta (0.0073740118269
           
             <tr>
               <th>Werkzeug</th>
-              <td>2.0.3</td>
+              <td>2.3.6</td>
               <td>Basic</td>
             </tr>
           
             <tr>
               <th>google-api-python-client</th>
-              <td>2.82.0</td>
+              <td>2.89.0</td>
               <td>TestBackupMetadataGdrive</td>
             </tr>
           
@@ -5309,7 +5305,7 @@ AssertionError: 0.007374011826953003 != 0.0 within 0.0001 delta (0.0073740118269
           
             <tr>
               <th>PyDrive2</th>
-              <td>1.15.1</td>
+              <td>1.15.4</td>
               <td>TestBackupMetadataGdrive</td>
             </tr>
           
@@ -5321,7 +5317,7 @@ AssertionError: 0.007374011826953003 != 0.0 within 0.0001 delta (0.0073740118269
           
             <tr>
               <th>google-api-python-client</th>
-              <td>2.82.0</td>
+              <td>2.89.0</td>
               <td>TestCliGdrivedb</td>
             </tr>
           
@@ -5339,7 +5335,7 @@ AssertionError: 0.007374011826953003 != 0.0 within 0.0001 delta (0.0073740118269
           
             <tr>
               <th>PyDrive2</th>
-              <td>1.15.1</td>
+              <td>1.15.4</td>
               <td>TestCliGdrivedb</td>
             </tr>
           
@@ -5351,7 +5347,7 @@ AssertionError: 0.007374011826953003 != 0.0 within 0.0001 delta (0.0073740118269
           
             <tr>
               <th>google-api-python-client</th>
-              <td>2.82.0</td>
+              <td>2.89.0</td>
               <td>TestEbookConvertCalibreGDrive</td>
             </tr>
           
@@ -5369,7 +5365,7 @@ AssertionError: 0.007374011826953003 != 0.0 within 0.0001 delta (0.0073740118269
           
             <tr>
               <th>PyDrive2</th>
-              <td>1.15.1</td>
+              <td>1.15.4</td>
               <td>TestEbookConvertCalibreGDrive</td>
             </tr>
           
@@ -5381,7 +5377,7 @@ AssertionError: 0.007374011826953003 != 0.0 within 0.0001 delta (0.0073740118269
           
             <tr>
               <th>google-api-python-client</th>
-              <td>2.82.0</td>
+              <td>2.89.0</td>
               <td>TestEbookConvertGDriveKepubify</td>
             </tr>
           
@@ -5399,7 +5395,7 @@ AssertionError: 0.007374011826953003 != 0.0 within 0.0001 delta (0.0073740118269
           
             <tr>
               <th>PyDrive2</th>
-              <td>1.15.1</td>
+              <td>1.15.4</td>
               <td>TestEbookConvertGDriveKepubify</td>
             </tr>
           
@@ -5411,7 +5407,7 @@ AssertionError: 0.007374011826953003 != 0.0 within 0.0001 delta (0.0073740118269
           
             <tr>
               <th>comicapi</th>
-              <td>2.2.1</td>
+              <td>3.0.0</td>
               <td>TestEditAdditionalBooks</td>
             </tr>
           
@@ -5423,7 +5419,7 @@ AssertionError: 0.007374011826953003 != 0.0 within 0.0001 delta (0.0073740118269
           
             <tr>
               <th>google-api-python-client</th>
-              <td>2.82.0</td>
+              <td>2.89.0</td>
               <td>TestEditAuthorsGdrive</td>
             </tr>
           
@@ -5441,7 +5437,7 @@ AssertionError: 0.007374011826953003 != 0.0 within 0.0001 delta (0.0073740118269
           
             <tr>
               <th>PyDrive2</th>
-              <td>1.15.1</td>
+              <td>1.15.4</td>
               <td>TestEditAuthorsGdrive</td>
             </tr>
           
@@ -5453,13 +5449,13 @@ AssertionError: 0.007374011826953003 != 0.0 within 0.0001 delta (0.0073740118269
           
             <tr>
               <th>beautifulsoup4</th>
-              <td>4.12.0</td>
+              <td>4.12.2</td>
               <td>TestLoadMetadata</td>
             </tr>
           
             <tr>
               <th>google-api-python-client</th>
-              <td>2.82.0</td>
+              <td>2.89.0</td>
               <td>TestEditBooksOnGdrive</td>
             </tr>
           
@@ -5477,7 +5473,7 @@ AssertionError: 0.007374011826953003 != 0.0 within 0.0001 delta (0.0073740118269
           
             <tr>
               <th>PyDrive2</th>
-              <td>1.15.1</td>
+              <td>1.15.4</td>
               <td>TestEditBooksOnGdrive</td>
             </tr>
           
@@ -5489,7 +5485,7 @@ AssertionError: 0.007374011826953003 != 0.0 within 0.0001 delta (0.0073740118269
           
             <tr>
               <th>beautifulsoup4</th>
-              <td>4.12.0</td>
+              <td>4.12.2</td>
               <td>TestLoadMetadataScholar</td>
             </tr>
           
@@ -5501,7 +5497,7 @@ AssertionError: 0.007374011826953003 != 0.0 within 0.0001 delta (0.0073740118269
           
             <tr>
               <th>google-api-python-client</th>
-              <td>2.82.0</td>
+              <td>2.89.0</td>
               <td>TestSetupGdrive</td>
             </tr>
           
@@ -5519,7 +5515,7 @@ AssertionError: 0.007374011826953003 != 0.0 within 0.0001 delta (0.0073740118269
           
             <tr>
               <th>PyDrive2</th>
-              <td>1.15.1</td>
+              <td>1.15.4</td>
               <td>TestSetupGdrive</td>
             </tr>
           
@@ -5537,7 +5533,7 @@ AssertionError: 0.007374011826953003 != 0.0 within 0.0001 delta (0.0073740118269
           
             <tr>
               <th>python-Levenshtein</th>
-              <td>0.20.9</td>
+              <td>0.21.1</td>
               <td>TestGoodreads</td>
             </tr>
           
@@ -5573,13 +5569,13 @@ AssertionError: 0.007374011826953003 != 0.0 within 0.0001 delta (0.0073740118269
           
             <tr>
               <th>Flask-Dance</th>
-              <td>6.2.0</td>
+              <td>7.0.0</td>
               <td>TestOAuthLogin</td>
             </tr>
           
             <tr>
               <th>SQLAlchemy-Utils</th>
-              <td>0.40.0</td>
+              <td>0.41.1</td>
               <td>TestOAuthLogin</td>
             </tr>
           
@@ -5591,7 +5587,7 @@ AssertionError: 0.007374011826953003 != 0.0 within 0.0001 delta (0.0073740118269
 </div>
 
 <script>
-    drawCircle(446, 1, 1, 7);
+    drawCircle(446, 0, 1, 8);
     showCase(5);
 </script>
 
