@@ -209,6 +209,9 @@ class Tags(Base):
     def get(self):
         return self.name
 
+    def __eq__(self, other):
+        return self.name == other
+
     def __repr__(self):
         return "<Tags('{0})>".format(self.name)
 
@@ -221,13 +224,16 @@ class Authors(Base):
     sort = Column(String(collation='NOCASE'))
     link = Column(String, nullable=False, default="")
 
-    def __init__(self, name, sort, link):
+    def __init__(self, name, sort, link=""):
         self.name = name
         self.sort = sort
         self.link = link
 
     def get(self):
         return self.name
+
+    def __eq__(self, other):
+        return self.name == other
 
     def __repr__(self):
         return "<Authors('{0},{1}{2}')>".format(self.name, self.sort, self.link)
@@ -247,6 +253,9 @@ class Series(Base):
     def get(self):
         return self.name
 
+    def __eq__(self, other):
+        return self.name == other
+
     def __repr__(self):
         return "<Series('{0},{1}')>".format(self.name, self.sort)
 
@@ -263,6 +272,9 @@ class Ratings(Base):
     def get(self):
         return self.rating
 
+    def __eq__(self, other):
+        return self.rating == other
+
     def __repr__(self):
         return "<Ratings('{0}')>".format(self.rating)
 
@@ -277,10 +289,13 @@ class Languages(Base):
         self.lang_code = lang_code
 
     def get(self):
-        if self.language_name:
+        if hasattr(self, "language_name"):
             return self.language_name
         else:
             return self.lang_code
+
+    def __eq__(self, other):
+        return self.lang_code == other
 
     def __repr__(self):
         return "<Languages('{0}')>".format(self.lang_code)
@@ -299,6 +314,9 @@ class Publishers(Base):
 
     def get(self):
         return self.name
+
+    def __eq__(self, other):
+        return self.name == other
 
     def __repr__(self):
         return "<Publishers('{0},{1}')>".format(self.name, self.sort)
@@ -995,7 +1013,12 @@ class CalibreDB:
                 title = title[len(prep):] + ', ' + prep
             return title.strip()
 
-        conn = conn or self.session.connection().connection.driver_connection
+        try:
+            # sqlalchemy <1.4.24
+            conn = conn or self.session.connection().connection.driver_connection
+        except AttributeError:
+            # sqlalchemy >1.4.24 and sqlalchemy 2.0
+            conn = conn or self.session.connection().connection.connection
         try:
             conn.create_function("title_sort", 1, _title_sort)
         except sqliteOperationalError:
