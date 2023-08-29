@@ -115,7 +115,8 @@ def _extract_cover(tmp_file_name, original_file_extension, rar_executable):
 def get_comic_info(tmp_file_path, original_file_name, original_file_extension, rar_executable):
     if use_comic_meta:
         try:
-            archive = ComicArchive(tmp_file_path, rar_exe_path=rar_executable)
+            # archive = ComicArchive(tmp_file_path, rar_exe_path=rar_executable)
+            archive = ComicArchive(tmp_file_path)
         except TypeError:
             load_archive_plugins(force=True, rar=rar_executable)
             archive = ComicArchive(tmp_file_path)
@@ -172,7 +173,8 @@ def get_comic_info(tmp_file_path, original_file_name, original_file_extension, r
         languages="",
         publisher="",
         pubdate="",
-        identifiers=[])
+        identifiers=[],
+        page_count=0)
 
 
 
