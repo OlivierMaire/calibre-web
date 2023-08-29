@@ -140,7 +140,7 @@ def get_comic_info(tmp_file_path, original_file_name, original_file_extension, r
 
             if (loaded_metadata.page_count == None):
                 # get pageCountManualy
-                loaded_metadata.page_count = archive.getNumberOfPages()
+                loaded_metadata.page_count = archive.get_number_of_pages()
             return BookMeta(
                 file_path=tmp_file_path,
                 extension=original_file_extension,
@@ -178,10 +178,11 @@ def get_comic_info(tmp_file_path, original_file_name, original_file_extension, r
 
 def extract_page(tmp_file_name, original_file_extension, rar_executable, pageNum):
     if use_comic_meta:
-        archive = ComicArchive(tmp_file_name, rar_exe_path=rar_executable)
-        return archive.getPage(pageNum), archive.getPageName(pageNum)
+        # archive = ComicArchive(tmp_file_name, rar_exe_path=rar_executable)
+        archive = ComicArchive(tmp_file_name)
+        return archive.get_page(pageNum), archive.get_page_name(pageNum)
     else:
-        cover_data, filename = _extract_page_from_archive(original_file_extension, tmp_file_name, rar_executable)
+        cover_data, filename = _extract_page_from_archive(original_file_extension, tmp_file_name, rar_executable,pageNum)
     return cover_data, filename # cover.cover_processing(tmp_file_name, cover_data, extension)
 
 def _extract_page_from_archive(original_file_extension, tmp_file_name, rar_executable, pageNum):
