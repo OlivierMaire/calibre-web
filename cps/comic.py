@@ -120,6 +120,9 @@ def get_comic_info(tmp_file_path, original_file_name, original_file_extension, r
         except TypeError:
             load_archive_plugins(force=True, rar=rar_executable)
             archive = ComicArchive(tmp_file_path)
+
+        log.info(archive)
+
         if hasattr(archive, "seemsToBeAComicArchive"):
             seems_archive = archive.seemsToBeAComicArchive
         else:
