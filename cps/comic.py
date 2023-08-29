@@ -138,9 +138,9 @@ def get_comic_info(tmp_file_path, original_file_name, original_file_extension, r
             lang = loaded_metadata.language or ""
             loaded_metadata.language = isoLanguages.get_lang3(lang)
 
-            if (loaded_metadata.pageCount == None):
+            if (loaded_metadata.page_count == None):
                 # get pageCountManualy
-                loaded_metadata.pageCount = archive.getNumberOfPages()
+                loaded_metadata.page_count = archive.getNumberOfPages()
             return BookMeta(
                 file_path=tmp_file_path,
                 extension=original_file_extension,
@@ -156,7 +156,7 @@ def get_comic_info(tmp_file_path, original_file_name, original_file_extension, r
                 publisher=loaded_metadata.publisher or "",
                 pubdate="",
                 identifiers=[],
-                page_count=loaded_metadata.pageCount
+                page_count=loaded_metadata.page_count
                 )
 
     return BookMeta(
