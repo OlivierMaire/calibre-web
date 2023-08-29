@@ -1684,12 +1684,13 @@ def read_book(book_id, book_format):
                     title = title + " - " + book.series[0].name
                     if book.series_index:
                         title = title + " #" + '{0:.2f}'.format(book.series_index).rstrip('0').rstrip('.')
-                log.debug(u"Start comic reader for %d", book_id)
-                if config.config_use_google_drive or use_comic_meta != True or config.config_use_comics_lazyload == False:
-                    return render_title_template('readcbr.html', comicfile=all_name, title=title,
-                                                extension=fileExt, bookmark=bookmark, firstpage_is_cover=firstpage_is_cover )
-                else:
-                    return render_title_template('readcbr_alt.html', comicfile=all_name, title=title,
+                log.info(u"Start comic reader for %d", book_id)
+                log.info(u"use_comic_meta: " + use_comic_meta)
+                # if config.config_use_google_drive or use_comic_meta != True or config.config_use_comics_lazyload == False:
+                #     return render_title_template('readcbr.html', comicfile=all_name, title=title,
+                #                                 extension=fileExt, bookmark=bookmark, firstpage_is_cover=firstpage_is_cover )
+                # else:
+                return render_title_template('readcbr_alt.html', comicfile=all_name, title=title,
                                                  extension=fileExt, bookmark=bookmark, firstpage_is_cover=firstpage_is_cover)
         log.debug(u"Oops! Selected book title is unavailable. File does not exist or is not accessible")
         flash(_(u"Oops! Selected book title is unavailable. File does not exist or is not accessible"),
