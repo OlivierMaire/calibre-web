@@ -25,15 +25,15 @@ from datetime import datetime
 import json
 from shutil import copyfile
 from uuid import uuid4
-from markupsafe import escape  # dependency of flask
+from markupsafe import escape, Markup  # dependency of flask
 from functools import wraps
 
 try:
-    from lxml.html.clean import clean_html
+    from lxml.html.clean import clean_html, Cleaner
 except ImportError:
     clean_html = None
 
-from flask import Blueprint, request, flash, redirect, url_for, abort, Markup, Response
+from flask import Blueprint, request, flash, redirect, url_for, abort, Response
 from flask_babel import gettext as _
 from flask_babel import lazy_gettext as N_
 from flask_babel import get_locale
@@ -599,6 +599,8 @@ def identifier_list(to_save, book):
         val_key = id_val_prefix + type_key[len(id_type_prefix):]
         if val_key not in to_save.keys():
             continue
+        if to_save[val_key].startswith("data:"):
+            to_save[val_key], __, __ = str.partition(to_save[val_key], ",")
         result.append(db.Identifiers(to_save[val_key], type_value, book.id))
     return result
 
@@ -1212,7 +1214,7 @@ def upload_single_file(file_request, book, book_id):
 
             return uploader.process(
                 saved_filename, *os.path.splitext(requested_file.filename),
-                rarExecutable=config.config_rarfile_location)
+                rar_executable=config.config_rarfile_location)
     return None
 
 

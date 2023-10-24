@@ -1002,13 +1002,21 @@ def series_list():
             if no_series_count:
                 entries.append([db.Category(_("None"), "-1"), no_series_count])
             entries = sorted(entries, key=lambda x: x[0].name.lower(), reverse=not order_no)
-            return render_title_template('list.html', entries=entries, folder='web.books_list', charlist=char_list,
-                                         title=_("Series"), page="serieslist", data="series", order=order_no)
+            return render_title_template('list.html',
+                                         entries=entries,
+                                         folder='web.books_list',
+                                         charlist=char_list,
+                                         title=_("Series"),
+                                         page="serieslist",
+                                         data="series", order=order_no)
         else:
-            entries = calibre_db.session.query(db.Books, func.count('books_series_link').label('count'),
-                                               func.max(db.Books.series_index), db.Books.id) \
-                .join(db.books_series_link).join(db.Series).filter(calibre_db.common_filters()) \
-                .group_by(text('books_series_link.series')).order_by(order).all()
+            entries = (calibre_db.session.query(db.Books, func.count('books_series_link').label('count'),
+                                                func.max(db.Books.series_index), db.Books.id)
+                       .join(db.books_series_link).join(db.Series).filter(calibre_db.common_filters())
+                       .group_by(text('books_series_link.series'))
+                       .having(or_(func.max(db.Books.series_index), db.Books.series_index==""))
+                       .order_by(order)
+                       .all())
             return render_title_template('grid.html', entries=entries, folder='web.books_list', charlist=char_list,
                                          title=_("Series"), page="serieslist", data="series", bodyClass="grid-view",
                                          order=order_no)
@@ -1561,7 +1569,7 @@ def read_book(book_id, book_format):
                         title = title + " #" + '{0:.2f}'.format(book.series_index).rstrip('0').rstrip('.')
                 log.debug("Start comic reader for %d", book_id)
                 return render_title_template('readcbr.html', comicfile=all_name, title=title,
-                                             extension=fileExt)
+                                             extension=fileExt, bookmark=bookmark)
         log.debug("Selected book is unavailable. File does not exist or is not accessible")
         flash(_("Oops! Selected book is unavailable. File does not exist or is not accessible"),
               category="error")

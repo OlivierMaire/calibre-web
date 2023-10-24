@@ -69,7 +69,7 @@ except ImportError as e:
     use_fb2_meta = False
 
 
-def process(tmp_file_path, original_file_name, original_file_extension, rarExecutable):
+def process(tmp_file_path, original_file_name, original_file_extension, rar_executable):
     meta = default_meta(tmp_file_path, original_file_name, original_file_extension)
     extension_upper = original_file_extension.upper()
     try:
@@ -79,16 +79,16 @@ def process(tmp_file_path, original_file_name, original_file_extension, rarExecu
             meta = epub.get_epub_info(tmp_file_path, original_file_name, original_file_extension)
         elif ".FB2" == extension_upper and use_fb2_meta is True:
             meta = fb2.get_fb2_info(tmp_file_path, original_file_extension)
-        elif extension_upper in ['.CBZ', '.CBT', '.CBR']:
+        elif extension_upper in ['.CBZ', '.CBT', '.CBR', ".CB7"]:
             meta = comic.get_comic_info(tmp_file_path,
                                         original_file_name,
                                         original_file_extension,
-                                        rarExecutable)
+                                        rar_executable)
     except Exception as ex:
         log.warning('cannot parse metadata, using default: %s', ex)
 
     if not meta.title.strip():
-        meta = original_file_name
+        meta = meta._replace(title=original_file_name)
     if not meta.author.strip() or meta.author.lower() == 'unknown':
         meta = meta._replace(author=_('Unknown'))
     return meta
@@ -248,7 +248,7 @@ def get_magick_version():
     return ret
 
 
-def upload(uploadfile, rarExcecutable):
+def upload(uploadfile, rar_excecutable):
     tmp_dir = os.path.join(gettempdir(), 'calibre_web')
 
     if not os.path.isdir(tmp_dir):
@@ -260,4 +260,4 @@ def upload(uploadfile, rarExcecutable):
     tmp_file_path = os.path.join(tmp_dir, md5)
     log.debug("Temporary file: %s", tmp_file_path)
     uploadfile.save(tmp_file_path)
-    return process(tmp_file_path, filename_root, file_extension, rarExcecutable)
+    return process(tmp_file_path, filename_root, file_extension, rar_excecutable)
